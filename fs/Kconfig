@@ -282,4 +282,10 @@ config IOSCHED_CLASS_CONTROL
 	help
 	  I/O sched class control
 
+config DYNAMIC_FSYNC
+	bool "dynamic file sync control"
+	default n
+	help
+	  An experimental file sync control using Android's early suspend / late resume drivers.
+
 endmenu

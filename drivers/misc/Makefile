@@ -62,6 +62,34 @@ obj-$(CONFIG_GPS_CTRL)		+= gpsctl.o
 obj-$(CONFIG_GPS_IRQ)		+= brcm_gps_irq.o
 obj-$(CONFIG_SPRD_PEER_STATE)	+= sprd_peer_state.o
 obj-$(CONFIG_BTHID)		+= bthid.o
+obj-$(CONFIG_BLX)		+= blx.o
 obj-y		+= sprd_vsp/
 obj-y		+= sprd_busmonitor/
 obj-y		+= sprd_cproc/
+obj-$(CONFIG_USBHUB_USB3503)	+= usb3503.o
+obj-$(CONFIG_USBHUB_USB3503_OTG_CONN)	+= usb3503_otg_conn.o
+obj-$(CONFIG_USBHUB_USB3803)	+= usb3803.o
+obj-$(CONFIG_MFD_MAX77693)	+= max77693-muic.o
+obj-$(CONFIG_STMPE811_ADC)	+= stmpe811-adc.o
+obj-$(CONFIG_JACK_MON)		+= jack.o
+obj-$(CONFIG_UART_SELECT)	+= uart_select.o
+obj-$(CONFIG_WIMAX_CMC)         += max8893.o
+ifeq ($(CONFIG_MUIC_DET_JACK),y)
+obj-$(CONFIG_SEC_DEV_JACK)	+= sec_jack_muic.o
+else
+obj-$(CONFIG_SEC_DEV_JACK)	+= sec_jack.o
+endif
+obj-$(CONFIG_MUIC_MAX8997)	+= max8997-muic.o
+obj-$(CONFIG_PN544)		+= pn544.o
+obj-$(CONFIG_FM34_WE395)	+= fm34_we395.o
+obj-$(CONFIG_AUDIENCE_ES305)	+= es305.o
+
+obj-$(CONFIG_SLP_PROCESS_MON)	+= slp_process_monitor.o
+obj-$(CONFIG_SLP_LOWMEM_NOTIFY)	+= slp_lowmem_notify.o
+
+obj-$(CONFIG_MACH_M0_CTC)   += cw_tty.o
+
+# Secure OS Mobicore Interface
+CFLAGS_tzic.o :=$(call as-instr,.arch_extension sec,-DREQUIRES_SEC=1)
+obj-$(CONFIG_MOBICORE_SUPPORT)  += tzic.o
+obj-$(CONFIG_UID_CPUTIME) += uid_cputime.o

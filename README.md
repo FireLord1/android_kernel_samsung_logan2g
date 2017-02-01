@@ -9,6 +9,6 @@ My main focus is to learn about kernels as i am done with roms.
 * https://github.com/CyanogenMod/android_kernel_samsung_espresso10
 * https://github.com/CyanogenMod/android_kernel_samsung_smdk4412
 
-# Mention my name if you like to 
+## Mention my name if you like to 
 * FireLord 
 * Email- firelord.xda@gmail.com

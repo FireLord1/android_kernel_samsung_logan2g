@@ -110,7 +110,5 @@ config ANDROID_LMK_ENHANCE
         bool "Android Low Memory Killer Enhance"
         default n
 endif
-
-endif # if ANDROID
-
+endif
 endmenu

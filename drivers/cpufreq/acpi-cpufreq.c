@@ -343,7 +343,7 @@ static int acpi_cpufreq_target(struct cpufreq_policy *policy,
 	else
 		cmd.mask = cpumask_of(policy->cpu);
 
-	freqs.old = perf->states[perf->state].core_frequency * 1000;
+	freqs.old = perf->states[perf->state].core_frequency * 1024;
 	freqs.new = data->freq_table[next_state].frequency;
 	for_each_cpu(i, policy->cpus) {
 		freqs.cpu = i;
@@ -389,11 +389,11 @@ acpi_cpufreq_guess_freq(struct acpi_cpufreq_data *data, unsigned int cpu)
 		/* search the closest match to cpu_khz */
 		unsigned int i;
 		unsigned long freq;
-		unsigned long freqn = perf->states[0].core_frequency * 1000;
+		unsigned long freqn = perf->states[0].core_frequency * 1024;
 
 		for (i = 0; i < (perf->state_count-1); i++) {
 			freq = freqn;
-			freqn = perf->states[i+1].core_frequency * 1000;
+			freqn = perf->states[i+1].core_frequency * 1024;
 			if ((2 * cpu_khz) > (freqn + freq)) {
 				perf->state = i;
 				return freq;
@@ -404,7 +404,7 @@ acpi_cpufreq_guess_freq(struct acpi_cpufreq_data *data, unsigned int cpu)
 	} else {
 		/* assume CPU is at P0... */
 		perf->state = 0;
-		return perf->states[0].core_frequency * 1000;
+		return perf->states[0].core_frequency * 1024;
 	}
 }
 
@@ -603,16 +603,16 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
 	/* detect transition latency */
 	policy->cpuinfo.transition_latency = 0;
 	for (i = 0; i < perf->state_count; i++) {
-		if ((perf->states[i].transition_latency * 1000) >
+		if ((perf->states[i].transition_latency * 1024) >
 		    policy->cpuinfo.transition_latency)
 			policy->cpuinfo.transition_latency =
-			    perf->states[i].transition_latency * 1000;
+			    perf->states[i].transition_latency * 1024;
 	}
 
 	/* Check for high latency (>20uS) from buggy BIOSes, like on T42 */
 	if (perf->control_register.space_id == ACPI_ADR_SPACE_FIXED_HARDWARE &&
-	    policy->cpuinfo.transition_latency > 20 * 1000) {
-		policy->cpuinfo.transition_latency = 20 * 1000;
+	    policy->cpuinfo.transition_latency > 20 * 1024) {
+		policy->cpuinfo.transition_latency = 20 * 1024;
 		printk_once(KERN_INFO
 			    "P-state transition latency capped at 20 uS\n");
 	}
@@ -620,12 +620,12 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
 	/* table init */
 	for (i = 0; i < perf->state_count; i++) {
 		if (i > 0 && perf->states[i].core_frequency >=
-		    data->freq_table[valid_states-1].frequency / 1000)
+		    data->freq_table[valid_states-1].frequency / 1024)
 			continue;
 
 		data->freq_table[valid_states].index = i;
 		data->freq_table[valid_states].frequency =
-		    perf->states[i].core_frequency * 1000;
+		    perf->states[i].core_frequency * 1024;
 		valid_states++;
 	}
 	data->freq_table[valid_states].frequency = CPUFREQ_TABLE_END;
@@ -635,7 +635,7 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
 	if (result)
 		goto err_freqfree;
 
-	if (perf->states[0].core_frequency * 1000 != policy->cpuinfo.max_freq)
+	if (perf->states[0].core_frequency * 1024 != policy->cpuinfo.max_freq)
 		printk(KERN_WARNING FW_WARN "P-state 0 is not max freq\n");
 
 	switch (perf->control_register.space_id) {
